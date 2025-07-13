@@ -117,13 +117,45 @@ def form_filled_page(
 
 # --- Test using input data fixture ---
 
+# def test_submit_success(
+    # form_filled_page: Page,
+    # register_button: Locator,
+    # term_checkbox: Locator,
+    # form_input_data: dict,
+# ):
+    # term_checkbox.check()
+    # register_button.click()
+
+    # expect(form_filled_page.locator("#message")).to_contain_text("Successfully registered the following information")
+    # expect(form_filled_page.locator("#resultFn")).to_contain_text(f"First Name: {form_input_data['first_name']}")
+    # expect(form_filled_page.locator("#resultLn")).to_contain_text(f"Last Name: {form_input_data['last_name']}")
+    # expect(form_filled_page.locator("#resultPhone")).to_contain_text(f"Phone Number: {form_input_data['phone']}")
+    # expect(form_filled_page.locator("#country")).to_contain_text(f"Country: {form_input_data['country']}")
+    # expect(form_filled_page.locator("#resultEmail")).to_contain_text(f"Email: {form_input_data['email']}")
+
+    # class_attr = form_filled_page.locator("#message").get_attribute("class")
+    # assert "alert-success" in class_attr.split()
+    # assert "alert-danger" not in class_attr.split()
+
 def test_submit_success(
     form_filled_page: Page,
     register_button: Locator,
     term_checkbox: Locator,
     form_input_data: dict,
 ):
+    # 填寫欄位
+    form_filled_page.get_by_label("First name").fill(form_input_data["first_name"])
+    form_filled_page.get_by_label("Last name").fill(form_input_data["last_name"])
+    form_filled_page.get_by_label("Email").fill(form_input_data["email"])
+    form_filled_page.get_by_label("Phone Number").fill(form_input_data["phone"])
+    form_filled_page.get_by_label("Password").fill(form_input_data["password"])
+    form_filled_page.get_by_label("Confirm Password").fill(form_input_data["confirm_password"])
+    form_filled_page.get_by_label("Country").select_option(form_input_data["country"])
+
+    # 等 checkbox enabled 後再 check
+    expect(term_checkbox).to_be_enabled(timeout=5000)
     term_checkbox.check()
+
     register_button.click()
 
     expect(form_filled_page.locator("#message")).to_contain_text("Successfully registered the following information")
